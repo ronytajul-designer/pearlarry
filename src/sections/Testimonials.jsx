@@ -44,7 +44,7 @@ export default function Testimonials() {
     progress.set(0)
     setIndex(next)
     animate(x, metrics.offset - next * metrics.step, {
-      type: 'spring', stiffness: 140, damping: 26,
+      duration: 0.8, ease, // tween, no overshoot
       onComplete: () => {
         // Teleport back into the middle copy without a visible jump.
         if (next < N || next >= 2 * N) {
@@ -103,7 +103,7 @@ export default function Testimonials() {
               <motion.article
                 key={i}
                 className="testi-card"
-                animate={{ opacity: isActive ? 1 : 0.55, scale: isActive ? 1 : 0.94 }}
+                animate={{ opacity: isActive ? 1 : 0.5 }}
                 transition={{ duration: 0.7, ease }}
                 aria-hidden={!isActive}
                 onTap={() => !isActive && go(i)}
