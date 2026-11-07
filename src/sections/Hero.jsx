@@ -67,7 +67,7 @@ export default function Hero({ ready }) {
             animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 1, ease, delay: 1.15 }}
           >
-              <a href="#best-sellers" className="btn btn--light" onClick={(e) => { e.preventDefault(); scrollTo('#best-sellers') }}>
+              <a href="#best-sellers" className="btn btn--light btn--to-brand" onClick={(e) => { e.preventDefault(); scrollTo('#best-sellers') }}>
                 <RollText text="Shop Now" />
               </a>
           </motion.div>

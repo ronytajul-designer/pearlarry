@@ -87,6 +87,8 @@ ul { list-style: none; margin: 0; padding: 0; }
 .btn--brand { --bg: var(--brand); --fg: var(--white); --fill: #6e190b; --fill-fg: var(--white); }
 /* Light buttons sit on dark photos and on the red footer: fill with a pale blush so it never blends in. */
 .btn--light { --bg: var(--white); --fg: var(--text); --fill: var(--on-brand); --fill-fg: var(--brand); }
+/* Hero: white at rest, brand red on hover like every other primary button. (Footer keeps blush: red would vanish on the red footer.) */
+.btn--to-brand { --fill: var(--brand); --fill-fg: var(--white); }
 .btn::before {
   content: ''; position: absolute; z-index: -1; left: 50%; top: 100%;
   width: 150%; aspect-ratio: 1; border-radius: 50%; background: var(--fill);
