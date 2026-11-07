@@ -2,6 +2,10 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react
 import { animate, motion, useMotionValue } from 'framer-motion'
 import { TESTIMONIALS } from '../data'
 import { Reveal, SplitText, ease } from '../components/motion'
+import Icon from '../components/Icon'
+import { prefersReducedMotion } from '../lib/smooth'
+
+const AUTOPLAY = 6 // seconds per review
 
 const N = TESTIMONIALS.length
 const LOOP = [...TESTIMONIALS, ...TESTIMONIALS, ...TESTIMONIALS] // infinite illusion
@@ -12,7 +16,8 @@ export default function Testimonials() {
   const x = useMotionValue(0)
   const [index, setIndex] = useState(N) // start in the middle copy
   const [metrics, setMetrics] = useState({ step: 0, offset: 0 })
-  const paused = useRef(false)
+  const [paused, setPaused] = useState(false)
+  const progress = useMotionValue(0)
 
   const measure = useCallback(() => {
     const card = track.current?.children[0]
@@ -36,6 +41,7 @@ export default function Testimonials() {
   useEffect(() => { x.set(target(index)) }, [metrics]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const go = useCallback((next) => {
+    progress.set(0)
     setIndex(next)
     animate(x, metrics.offset - next * metrics.step, {
       type: 'spring', stiffness: 140, damping: 26,
@@ -48,19 +54,21 @@ export default function Testimonials() {
         }
       },
     })
-  }, [metrics, x])
+  }, [metrics, x, progress])
 
-  // Autoplay, paused on hover/focus/drag.
+  // Autoplay drives a progress value so the active bar visibly fills; pauses on hover, focus or drag.
   useEffect(() => {
-    const t = setInterval(() => { if (!paused.current && !document.hidden) go(index + 1) }, 5000)
-    return () => clearInterval(t)
-  }, [index, go])
+    if (paused || prefersReducedMotion()) return
+    const remaining = AUTOPLAY * (1 - progress.get())
+    const c = animate(progress, 1, { duration: remaining, ease: 'linear', onComplete: () => go(index + 1) })
+    return () => c.stop()
+  }, [index, paused, go, progress])
 
   const onDragEnd = (_, info) => {
     const swipe = info.offset.x + info.velocity.x * 0.2
     const moved = Math.round(-swipe / metrics.step)
     go(index + (moved || (Math.abs(swipe) > 40 ? -Math.sign(swipe) : 0)))
-    paused.current = false
+    setPaused(false)
   }
 
   const active = index % N
@@ -75,8 +83,8 @@ export default function Testimonials() {
       <div
         className="testi-viewport"
         ref={viewport}
-        onPointerEnter={() => (paused.current = true)}
-        onPointerLeave={() => (paused.current = false)}
+        onPointerEnter={() => setPaused(true)}
+        onPointerLeave={() => setPaused(false)}
         aria-roledescription="carousel"
       >
         <motion.div
@@ -86,7 +94,7 @@ export default function Testimonials() {
           drag="x"
           dragElastic={0.12}
           dragMomentum={false}
-          onDragStart={() => (paused.current = true)}
+          onDragStart={() => setPaused(true)}
           onDragEnd={onDragEnd}
         >
           {LOOP.map((t, i) => {
@@ -98,6 +106,8 @@ export default function Testimonials() {
                 animate={{ opacity: isActive ? 1 : 0.55, scale: isActive ? 1 : 0.94 }}
                 transition={{ duration: 0.7, ease }}
                 aria-hidden={!isActive}
+                onTap={() => !isActive && go(i)}
+                style={{ cursor: isActive ? 'grab' : 'pointer' }}
               >
                 <div className="testi-img"><img src={t.img} alt="" draggable="false" loading="lazy" /></div>
                 <div className="testi-text">
@@ -112,19 +122,40 @@ export default function Testimonials() {
         </motion.div>
       </div>
 
-      <div className="dots" role="tablist" aria-label="Choose testimonial">
-        {TESTIMONIALS.map((t, i) => (
-          <button
-            key={t.name}
-            role="tab"
-            aria-selected={active === i}
-            aria-label={`Show review from ${t.name}`}
-            className="dot"
-            onClick={() => go(N + i)}
-          >
-            <motion.span animate={{ width: active === i ? 30 : 8, backgroundColor: active === i ? '#91220f' : '#dcd1cc' }} transition={{ duration: 0.5, ease }} />
-          </button>
-        ))}
+      <div
+        className="testi-controls container"
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+      >
+        <button className="testi-arrow" onClick={() => go(index - 1)} aria-label="Previous review">
+          <Icon name="arrowRight" size={20} style={{ transform: 'scaleX(-1)' }} />
+        </button>
+
+        <div className="testi-progress" role="tablist" aria-label="Choose review">
+          {TESTIMONIALS.map((t, i) => (
+            <button
+              key={t.name}
+              role="tab"
+              aria-selected={active === i}
+              aria-label={`Review ${i + 1} of ${N}: ${t.name}`}
+              className={`seg ${active === i ? 'is-active' : ''}`}
+              onClick={() => go(N + i)}
+            >
+              <span className="seg-name">{t.name}</span>
+              <span className="seg-track">
+                <motion.span className="seg-fill" style={{ scaleX: active === i ? progress : i < active ? 1 : 0 }} />
+              </span>
+            </button>
+          ))}
+        </div>
+
+        <span className="testi-count" aria-live="polite">
+          <strong>{String(active + 1).padStart(2, '0')}</strong> / {String(N).padStart(2, '0')}
+        </span>
+
+        <button className="testi-arrow" onClick={() => go(index + 1)} aria-label="Next review">
+          <Icon name="arrowRight" size={20} />
+        </button>
       </div>
     </section>
   )

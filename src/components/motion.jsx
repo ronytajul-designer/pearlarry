@@ -104,13 +104,13 @@ export function ParallaxImg({ src, alt = '', className, speed = 12, reveal = tru
 }
 
 /** Subtle magnetic pull for buttons on pointer devices. */
-export function Magnetic({ children, strength = 0.25 }) {
+export function Magnetic({ children, strength = 0.16 }) {
   const ref = useRef(null)
   useEffect(() => {
     const el = ref.current
     if (!el || prefersReducedMotion() || !window.matchMedia('(hover: hover)').matches) return
-    const xTo = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'elastic.out(1, 0.4)' })
-    const yTo = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.4)' })
+    const xTo = gsap.quickTo(el, 'x', { duration: 0.8, ease: 'power3.out' })
+    const yTo = gsap.quickTo(el, 'y', { duration: 0.8, ease: 'power3.out' })
     const move = (e) => {
       const r = el.getBoundingClientRect()
       xTo((e.clientX - (r.left + r.width / 2)) * strength)
@@ -125,4 +125,21 @@ export function Magnetic({ children, strength = 0.25 }) {
     }
   }, [strength])
   return <span ref={ref} className="magnetic">{children}</span>
+}
+
+/** Button label: letters roll up one after another on hover (pure CSS, staggered via --i). */
+export function RollText({ text }) {
+  const chars = [...text]
+  const row = (hidden) => (
+    <span className="roll-row" aria-hidden={hidden || undefined}>
+      {chars.map((c, i) => (
+        <span key={i} className="roll-char" style={{ '--i': i }}>{c === ' ' ? '\u00a0' : c}</span>
+      ))}
+    </span>
+  )
+  return (
+    <span className="roll" aria-label={text}>
+      <span className="roll-track" aria-hidden="true">{row()}{row(true)}</span>
+    </span>
+  )
 }

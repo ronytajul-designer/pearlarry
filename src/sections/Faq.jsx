@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FAQS } from '../data'
-import { Magnetic, Reveal, SplitText, ease } from '../components/motion'
+import { Magnetic, Reveal, SplitText, ease, RollText } from '../components/motion'
 
 export default function Faq() {
   const [open, setOpen] = useState(0)
@@ -16,7 +16,7 @@ export default function Faq() {
           </Reveal>
           <Reveal delay={0.25} y={14}>
             <Magnetic>
-              <a href="mailto:hello@pearlarry.com" className="btn btn--brand"><span className="btn-roll" data-text="Contact Support">Contact Support</span></a>
+              <a href="mailto:hello@pearlarry.com" className="btn btn--brand"><RollText text="Contact Support" /></a>
             </Magnetic>
           </Reveal>
         </div>

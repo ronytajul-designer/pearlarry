@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
 import { LOOKS } from '../data'
-import { Magnetic, Reveal, SplitText, ease } from '../components/motion'
+import { Magnetic, Reveal, SplitText, ease, RollText } from '../components/motion'
 import Icon from '../components/Icon'
 import { prefersReducedMotion } from '../lib/smooth'
 
@@ -126,7 +126,7 @@ export default function StylingEdit() {
 
         <Reveal className="center" y={16}>
           <Magnetic>
-            <a href="#categories" className="btn btn--brand"><span className="btn-roll" data-text="Shop the Looks">Shop the Looks</span></a>
+            <a href="#categories" className="btn btn--brand"><RollText text="Shop the Looks" /></a>
           </Magnetic>
         </Reveal>
       </div>

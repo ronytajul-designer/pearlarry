@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { IMG } from '../data'
-import { ParallaxImg, SplitText, ease } from '../components/motion'
+import { ParallaxImg, SplitText, ease, RollText } from '../components/motion'
 import Icon from '../components/Icon'
 
 export default function Cta() {
@@ -61,7 +61,7 @@ export default function Cta() {
                     aria-invalid={state === 'error'}
                     aria-describedby="email-note"
                   />
-                  <button type="submit" className="btn btn--brand"><span className="btn-roll" data-text="Claim 15% off">Claim 15% off</span></button>
+                  <button type="submit" className="btn btn--brand"><RollText text="Claim 15% off" /></button>
                 </motion.form>
               ) : (
                 <motion.div key="ok" className="newsletter-ok" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, ease }}>

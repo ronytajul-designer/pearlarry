@@ -1,19 +1,38 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { FOOTER } from '../data'
 import { gsap, prefersReducedMotion, useScrollTo } from '../lib/smooth'
-import { Magnetic } from '../components/motion'
+import { Magnetic, RollText } from '../components/motion'
 
 export default function Footer() {
   const root = useRef(null)
   const scrollTo = useScrollTo()
+  const mark = useRef(null)
+
+  // Fit the wordmark edge to edge inside the container at any viewport width.
+  useLayoutEffect(() => {
+    const el = mark.current
+    const fit = () => {
+      el.style.fontSize = '100px'
+      const avail = el.parentElement.clientWidth - parseFloat(getComputedStyle(el.parentElement).paddingLeft) * 2
+      const chars = el.children
+      const textW = chars[chars.length - 1].getBoundingClientRect().right - chars[0].getBoundingClientRect().left
+      el.style.fontSize = `${(100 * avail * 0.97) / textW}px`
+    }
+    fit()
+    document.fonts?.ready.then(fit)
+    const ro = new ResizeObserver(fit)
+    ro.observe(el.parentElement)
+    return () => ro.disconnect()
+  }, [])
 
   useEffect(() => {
     if (prefersReducedMotion()) return
     const ctx = gsap.context(() => {
       gsap.from('.wm-char', {
-        yPercent: 100,
-        ease: 'none',
-        stagger: 0.06,
+        yPercent: 55,
+        opacity: 0,
+        ease: 'power2.out',
+        stagger: 0.07,
         scrollTrigger: { trigger: '.wordmark', start: 'top bottom', end: 'bottom 85%', scrub: 0.6 },
       })
       gsap.from('.foot-col', {
@@ -46,15 +65,15 @@ export default function Footer() {
           </nav>
         </div>
 
-        <p className="wordmark" aria-hidden="true">
-          {'Pearlarry'.split('').map((c, i) => <span className="wm-mask" key={i}><span className="wm-char">{c}</span></span>)}
+        <p className="wordmark" aria-hidden="true" ref={mark}>
+          {'Pearlarry'.split('').map((c, i) => <span className="wm-char" key={i}>{c}</span>)}
         </p>
 
         <div className="foot-bottom">
           <p>© 2026 Pearlarry. All rights reserved.</p>
           <Magnetic>
             <button className="btn btn--light btn--sm" onClick={() => scrollTo(0, { duration: 2.2 })}>
-              <span className="btn-roll" data-text="Back to top ↑">Back to top ↑</span>
+              <RollText text="Back to top ↑" />
             </button>
           </Magnetic>
           <p className="foot-legal"><a href="#top">Terms</a> · <a href="#top">Privacy</a></p>
