@@ -1,7 +1,7 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { FOOTER } from '../data'
 import { gsap, prefersReducedMotion, useScrollTo } from '../lib/smooth'
-import { Magnetic, RollText } from '../components/motion'
+import { RollText } from '../components/motion'
 
 export default function Footer() {
   const root = useRef(null)
@@ -71,11 +71,9 @@ export default function Footer() {
 
         <div className="foot-bottom">
           <p>© 2026 Pearlarry. All rights reserved.</p>
-          <Magnetic>
             <button className="btn btn--light btn--sm" onClick={() => scrollTo(0, { duration: 2.2 })}>
               <RollText text="Back to top ↑" />
             </button>
-          </Magnetic>
           <p className="foot-legal"><a href="#top">Terms</a> · <a href="#top">Privacy</a></p>
         </div>
       </div>

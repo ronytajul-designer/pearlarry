@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { PRODUCTS } from '../data'
-import { Reveal, SplitText, ease } from '../components/motion'
+import { Reveal, RollText, SplitText, ease } from '../components/motion'
 import Icon from '../components/Icon'
 
 function ProductCard({ p, i, onAdd }) {
@@ -47,7 +47,7 @@ function ProductCard({ p, i, onAdd }) {
         <div className="product-foot">
           <span className="product-price">${p.price}</span>
           <motion.button
-            className={`add-btn ${added ? 'is-added' : ''}`}
+            className={`btn btn--brand btn--sm add-btn ${added ? 'is-added' : ''}`}
             onClick={add}
             whileTap={{ scale: 0.9 }}
             aria-label={added ? `${p.name} added to cart` : `Add ${p.name} to cart`}
@@ -60,7 +60,7 @@ function ProductCard({ p, i, onAdd }) {
                 </motion.span>
               ) : (
                 <motion.span key="add" className="add-inner" initial={{ y: 14, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -14, opacity: 0 }} transition={{ duration: 0.25 }}>
-                  Add
+                  <RollText text="Add" />
                 </motion.span>
               )}
             </AnimatePresence>

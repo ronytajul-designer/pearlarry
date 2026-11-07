@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { IMG } from '../data'
-import { Magnetic, SplitText, ease, RollText } from '../components/motion'
+import { SplitText, ease, RollText } from '../components/motion'
 import { gsap, prefersReducedMotion, useScrollTo } from '../lib/smooth'
 
 export default function Hero({ ready }) {
@@ -67,11 +67,9 @@ export default function Hero({ ready }) {
             animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 1, ease, delay: 1.15 }}
           >
-            <Magnetic>
               <a href="#best-sellers" className="btn btn--light" onClick={(e) => { e.preventDefault(); scrollTo('#best-sellers') }}>
                 <RollText text="Shop Now" />
               </a>
-            </Magnetic>
           </motion.div>
         </div>
       </motion.div>
