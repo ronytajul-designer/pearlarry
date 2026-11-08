@@ -77,8 +77,13 @@ export const FAQS = [
     a: 'Keep pieces dry, take them off before swimming or applying lotion, and store them separately in the pouch they arrive in. Wipe gently with a soft cloth to keep the shine.',
   },
   {
+    id: 'shipping',
+    q: 'How long does shipping take?',
+    a: 'Standard shipping takes 2–4 business days and is free on orders over $50. Need it sooner? Express shipping arrives in 1–2 business days for $9.90.',
+  },
+  {
     q: 'Can I return or exchange a piece if the fit isn’t right?',
-    a: 'Unworn pieces in their original packaging can be returned or exchanged. Start a request through our Returns page and we’ll guide you through it.',
+    a: 'Unworn pieces in their original packaging can be returned or exchanged. Contact our care team and we’ll guide you through it.',
   },
   {
     q: 'Do you offer gift wrapping and personalised notes?',
@@ -100,8 +105,8 @@ export const FOOTER = [
   ] },
   { title: 'Support', links: [
     { label: 'FAQ', to: '/#faq' },
-    { label: 'Shipping', to: '/contact' },
-    { label: 'Returns', to: '/contact' },
+    { label: 'Shipping', to: '/#faq-shipping' },
+    { label: 'Returns', to: '/returns' },
     { label: 'Contact', to: '/contact' },
   ] },
   { title: 'Follow', links: [

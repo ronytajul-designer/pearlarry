@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { PRODUCTS, getProduct, money, productCopy, BEST_SELLERS } from '../products'
-import { Accordion, Breadcrumb, Field, Modal, Qty, Radio, Stars } from '../components/ui'
+import { Breadcrumb, Field, Modal, Qty, Radio, Stars } from '../components/ui'
 import ProductCard from '../components/ProductCard'
 import Icon from '../components/Icon'
 import { Reveal, RollText, SplitText, ease } from '../components/motion'
 import { useAuth, useCart, useReady, useToast, EXPRESS_FEE } from '../lib/store'
 import { useScrollTo } from '../lib/smooth'
 import NotFound from './NotFound'
+import FaqSection from '../components/FaqSection'
 
 // Q1 answer is from Figma; Q2 to Q5 are placeholder copy until real policy text exists.
 const faqFor = (p) => [
@@ -350,12 +351,7 @@ export default function Product() {
         </div>
       </section>
 
-      <section className="section pdp-faq tint">
-        <div className="container">
-          <div className="center-head"><SplitText as="h2" className="h4" text="Frequently asked questions" /></div>
-          <Reveal y={30}><Accordion items={faqFor(p)} variant="acc--card" /></Reveal>
-        </div>
-      </section>
+      <FaqSection items={faqFor(p)} id="product-faq" />
 
       <Reviews p={p} />
 
