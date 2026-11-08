@@ -6,6 +6,7 @@ import { ease } from '../components/motion'
 import { NAV, PRODUCTS } from '../data'
 import { useCart, useReady } from '../lib/store'
 import { money } from '../products'
+import MegaMenu, { MEGA_CATEGORIES } from './MegaMenu'
 
 const MotionLink = motion.create(Link)
 
@@ -69,27 +70,38 @@ function SearchPanel({ onClose }) {
 export default function Navbar() {
   const ready = useReady()
   const { count: cart } = useCart()
-  const { pathname } = useLocation()
+  const { pathname, search: searchParams } = useLocation()
   const navigate = useNavigate()
   const { scrollY } = useScroll()
   const [hidden, setHidden] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState(false)
+  const [mega, setMega] = useState(false)
+  const megaTimer = useRef(null)
+  // Hover intent: small open delay avoids flicker when the pointer just passes over the nav.
+  const megaOpen = (delay = 90) => { clearTimeout(megaTimer.current); megaTimer.current = setTimeout(() => setMega(true), delay) }
+  const megaClose = (delay = 180) => { clearTimeout(megaTimer.current); megaTimer.current = setTimeout(() => setMega(false), delay) }
+  useEffect(() => {
+    if (!mega) return
+    const k = (e) => { if (e.key === 'Escape') { setMega(false); document.querySelector('.nav-caret')?.focus() } }
+    window.addEventListener('keydown', k)
+    return () => window.removeEventListener('keydown', k)
+  }, [mega])
 
   useMotionValueEvent(scrollY, 'change', (y) => {
     const prev = scrollY.getPrevious() ?? 0
     setScrolled(y > 40)
-    setHidden(y > 400 && y > prev && !open && !search)
+    setHidden(y > 400 && y > prev && !open && !search && !mega)
   })
 
   // Close overlays whenever the route changes.
-  useEffect(() => { setOpen(false); setSearch(false) }, [pathname])
+  useEffect(() => { setOpen(false); setSearch(false); setMega(false) }, [pathname, searchParams])
 
   return (
     <>
       <motion.header
-        className={`nav ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-open' : ''}`}
+        className={`nav ${scrolled ? 'is-scrolled' : ''} ${open ? 'is-open' : ''} ${mega ? 'is-mega' : ''}`}
         initial={{ y: -100, opacity: 0 }}
         animate={ready ? { y: hidden ? -100 : 0, opacity: 1 } : { y: -100, opacity: 0 }}
         transition={{ duration: 0.7, ease }}
@@ -97,7 +109,16 @@ export default function Navbar() {
         <Link to="/" className="logo">Pearlarry</Link>
 
         <nav className="nav-links" aria-label="Primary">
-          {NAV.map((l) => (
+          {NAV.map((l) => l.to === '/shop' ? (
+            <div key={l.label} className={`nav-item ${mega ? 'is-open' : ''}`} onPointerEnter={() => megaOpen()} onPointerLeave={() => megaClose()}>
+              <NavLink to={l.to} className={({ isActive }) => `nav-link ${isActive ? 'is-active' : ''}`} onClick={() => setMega(false)}>
+                <span data-text={l.label}>{l.label}</span>
+              </NavLink>
+              <button className="nav-caret" aria-label="Browse jewellery" aria-expanded={mega} aria-controls="mega-menu" onClick={() => setMega((m) => !m)}>
+                <Icon name="chevronDown" size={14} stroke={2} />
+              </button>
+            </div>
+          ) : (
             <NavLink key={l.label} to={l.to} end={l.to === '/'} className={({ isActive }) => `nav-link ${isActive ? 'is-active' : ''}`}>
               <span data-text={l.label}>{l.label}</span>
             </NavLink>
@@ -105,7 +126,7 @@ export default function Navbar() {
         </nav>
 
         <div className="nav-actions">
-          <button className="icon-btn search-btn" aria-label="Search" aria-expanded={search} onClick={() => { setOpen(false); setSearch(true) }}><Icon name="search" /></button>
+          <button className="icon-btn search-btn" aria-label="Search" aria-expanded={search} onClick={() => { setOpen(false); setMega(false); setSearch(true) }}><Icon name="search" /></button>
           <Link to="/cart" className="icon-btn" aria-label={`Bag, ${cart} items`}>
             <Icon name="cart" />
             <AnimatePresence mode="popLayout" initial={false}>
@@ -132,6 +153,15 @@ export default function Navbar() {
           </button>
         </div>
       </motion.header>
+
+      <AnimatePresence>
+        {mega && (
+          <>
+            <motion.div key="mega-scrim" className="mega-scrim" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, pointerEvents: 'none' }} onClick={() => setMega(false)} />
+            <MegaMenu key="mega" onNavigate={() => setMega(false)} onEnter={() => megaOpen(0)} onLeave={() => megaClose()} />
+          </>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>{search && <SearchPanel onClose={() => setSearch(false)} />}</AnimatePresence>
 
@@ -179,6 +209,23 @@ export default function Navbar() {
                 </div>
               ))}
             </nav>
+
+            <motion.div
+              className="mm-cats"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0, transition: { delay: 0.45, duration: 0.6, ease } }}
+              exit={{ opacity: 0 }}
+            >
+              <p>Shop by category</p>
+              <div>
+                {MEGA_CATEGORIES.map((c) => (
+                  <Link key={c.name} to={c.to} onClick={() => setOpen(false)} className="mm-cat">
+                    <img src={c.img} alt="" />
+                    <span>{c.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
 
             <motion.div
               className="mm-foot"
