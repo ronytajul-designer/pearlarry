@@ -142,8 +142,8 @@ ul { list-style: none; margin: 0; padding: 0; }
   transition: background-color .5s var(--ease), height .5s var(--ease), box-shadow .5s var(--ease), backdrop-filter .5s;
 }
 .nav.is-scrolled {
-  height: 72px; background: rgba(255, 255, 255, .78);
-  backdrop-filter: saturate(1.4) blur(14px); -webkit-backdrop-filter: saturate(1.4) blur(14px);
+  height: 72px; background: rgba(255, 255, 255, .88);
+  backdrop-filter: saturate(1.6) blur(28px);
   box-shadow: 0 1px 0 var(--border-subtle);
 }
 .logo { font-family: var(--heading); font-size: 26px; line-height: 1.1; letter-spacing: -0.06em; color: var(--brand); justify-self: start; }
@@ -185,7 +185,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 .mm-foot { margin-top: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 24px; border-top: 1px solid rgba(247, 220, 210, .2); color: var(--on-brand); font-size: 14px; }
 .mm-account { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; color: var(--tint); }
 /* Header while the menu is open: logo + cart + close only, recoloured for the red overlay */
-.nav.is-open { background: transparent; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+.nav.is-open { background: transparent; box-shadow: none; backdrop-filter: none; }
 .nav.is-open .logo { color: var(--tint); }
 .nav.is-open .search-btn { display: none; }
 .nav.is-open .icon-btn { background: transparent; border-color: rgba(247, 220, 210, .35); color: var(--tint); }
