@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { IMG } from '../images'
-import { PRODUCTS, countIn, getProduct, money } from '../products'
 import Icon from '../components/Icon'
 import { ease } from '../components/motion'
 
@@ -15,15 +14,10 @@ export const MEGA_CATEGORIES = [
   { name: 'Bracelets', img: IMG.bracelet, blurb: 'Fine chains, adjustable fit', to: q('category', 'Bracelets') },
 ]
 
-const EDITS = [
-  ['Everyday Edit', q('category', 'Everyday Edit'), PRODUCTS.filter((p) => p.tags.includes('everyday')).length],
-  ['Gifts', q('category', 'Gifts'), PRODUCTS.filter((p) => p.tags.includes('gift')).length],
-  ['Under $25', q('price', 'Under $25'), PRODUCTS.filter((p) => p.price < 25).length],
-  ['Top rated', q('sort', 'Top rated')],
+const LINKS = [
+  ['Edits', [['Everyday Edit', q('category', 'Everyday Edit')], ['Gifts', q('category', 'Gifts')], ['Under $25', q('price', 'Under $25')]]],
+  ['Materials', [['14k Gold Vermeil', q('material', '14k Gold Vermeil')], ['18k Gold Plated', q('material', '18k Gold Plated')], ['Sterling Silver', q('material', 'Sterling Silver')]]],
 ]
-
-const METALS = ['14k Gold Vermeil', '18k Gold Plated', 'Sterling Silver']
-const FEATURED = getProduct('radiance-pendant')
 
 const list = { show: { transition: { staggerChildren: 0.04, delayChildren: 0.12 } } }
 const item = { hidden: { opacity: 0, y: 10 }, show: { opacity: 1, y: 0, transition: { duration: 0.45, ease } } }
@@ -43,9 +37,10 @@ export default function MegaMenu({ onNavigate, onEnter, onLeave }) {
       exit={{ opacity: 0, y: -6, clipPath: 'inset(0 0 100% 0 round 0 0 24px 24px)', pointerEvents: 'none' }}
       transition={{ duration: 0.45, ease }}
     >
-      <motion.div className="container mega-grid" variants={list} initial="hidden" animate="show">
-        <div className="mega-col">
-          <motion.p className="mega-h" variants={item}>Shop by category</motion.p>
+      {/* Three calm columns: categories, a short list of edits, one preview image. */}
+      <motion.div className="mega-grid" variants={list} initial="hidden" animate="show">
+        <div>
+          <motion.p className="mega-h" variants={item}>Categories</motion.p>
           <ul className="mega-cats">
             {MEGA_CATEGORIES.map((c, i) => (
               <motion.li key={c.name} variants={item}>
@@ -57,35 +52,28 @@ export default function MegaMenu({ onNavigate, onEnter, onLeave }) {
                   onClick={onNavigate}
                 >
                   <img src={c.img} alt="" />
-                  <span><strong>{c.name}</strong><small>{c.blurb}</small></span>
-                  <em>{countIn(c.name)}</em>
+                  <span>{c.name}</span>
                   <Icon name="arrowRight" size={16} className="mega-cat-arrow" />
                 </Link>
               </motion.li>
             ))}
           </ul>
+          <motion.div variants={item}>
+            <Link to="/shop" className="link-arrow mega-all" onClick={onNavigate}>Shop all jewellery <Icon name="arrowRight" size={16} /></Link>
+          </motion.div>
         </div>
 
-        <div className="mega-col mega-col--links">
-          <motion.p className="mega-h" variants={item}>Edits</motion.p>
-          <ul className="mega-links">
-            {EDITS.map(([label, to, n]) => (
-              <motion.li key={label} variants={item}>
-                <Link to={to} onClick={onNavigate}>{label}{n !== undefined && <small>{n}</small>}</Link>
-              </motion.li>
-            ))}
-          </ul>
-          <motion.p className="mega-h mega-h--gap" variants={item}>Materials</motion.p>
-          <ul className="mega-links">
-            {METALS.map((m) => (
-              <motion.li key={m} variants={item}>
-                <Link to={q('material', m)} onClick={onNavigate}>
-                  <i className={`metal-dot metal-dot--${m.startsWith('Sterling') ? 'silver' : 'gold'}`} aria-hidden="true" />
-                  {m}
-                </Link>
-              </motion.li>
-            ))}
-          </ul>
+        <div className="mega-lists">
+          {LINKS.map(([title, links]) => (
+            <div key={title}>
+              <motion.p className="mega-h" variants={item}>{title}</motion.p>
+              <ul className="mega-links">
+                {links.map(([label, to]) => (
+                  <motion.li key={label} variants={item}><Link to={to} onClick={onNavigate}>{label}</Link></motion.li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
         <motion.div variants={item}>
@@ -95,7 +83,7 @@ export default function MegaMenu({ onNavigate, onEnter, onLeave }) {
                 key={cat.name}
                 src={cat.img}
                 alt=""
-                initial={{ opacity: 0, scale: 1.08 }}
+                initial={{ opacity: 0, scale: 1.06 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.6, ease }}
@@ -105,27 +93,13 @@ export default function MegaMenu({ onNavigate, onEnter, onLeave }) {
             <span className="mega-preview-text">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.strong key={cat.name} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.3, ease }}>
-                  {cat.name}
+                  {cat.blurb}
                 </motion.strong>
               </AnimatePresence>
-              <small>Shop {countIn(cat.name)} pieces <Icon name="arrowRight" size={14} /></small>
+              <small>Shop {cat.name.toLowerCase()} <Icon name="arrowRight" size={14} /></small>
             </span>
           </Link>
         </motion.div>
-
-        <motion.div variants={item}>
-          <Link to={`/product/${FEATURED.id}`} className="mega-feature" onClick={onNavigate}>
-            <span className="mega-feature-img"><img src={FEATURED.img} alt="" /><b>Bestseller</b></span>
-            <strong>{FEATURED.name}</strong>
-            <small>{FEATURED.material}</small>
-            <span className="mega-feature-price">{money(FEATURED.price)}{FEATURED.compareAt && <s>{money(FEATURED.compareAt)}</s>}</span>
-          </Link>
-        </motion.div>
-      </motion.div>
-
-      <motion.div className="container mega-foot" initial={{ opacity: 0 }} animate={{ opacity: 1, transition: { delay: 0.3 } }}>
-        <Link to="/shop" className="link-arrow" onClick={onNavigate}>Shop all {PRODUCTS.length} pieces <Icon name="arrowRight" size={16} /></Link>
-        <span>Free shipping over $50 · 30-day easy returns</span>
       </motion.div>
     </motion.div>
   )
