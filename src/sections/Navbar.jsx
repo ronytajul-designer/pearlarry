@@ -6,7 +6,7 @@ import { ease } from '../components/motion'
 import { NAV, PRODUCTS } from '../data'
 import { useCart, useReady } from '../lib/store'
 import { money } from '../products'
-import MegaMenu, { MEGA_CATEGORIES } from './MegaMenu'
+import MegaMenu from './MegaMenu'
 
 const MotionLink = motion.create(Link)
 
@@ -209,23 +209,6 @@ export default function Navbar() {
                 </div>
               ))}
             </nav>
-
-            <motion.div
-              className="mm-cats"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0, transition: { delay: 0.45, duration: 0.6, ease } }}
-              exit={{ opacity: 0 }}
-            >
-              <p>Shop by category</p>
-              <div>
-                {MEGA_CATEGORIES.map((c) => (
-                  <Link key={c.name} to={c.to} onClick={() => setOpen(false)} className="mm-cat">
-                    <img src={c.img} alt="" />
-                    <span>{c.name}</span>
-                  </Link>
-                ))}
-              </div>
-            </motion.div>
 
             <motion.div
               className="mm-foot"

@@ -727,11 +727,6 @@ textarea.input { height: auto; min-height: 120px; padding: 12px 16px; resize: ve
 @media (max-width: 1180px) { .mega-grid { grid-template-columns: 1fr .8fr 1.2fr; gap: 32px; } .mega-preview { height: 280px; } }
 @media (max-width: 900px) { .mega, .mega-scrim, .nav-caret { display: none; } }
 
-/* mobile menu category tiles */
-.mm-cats p { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--on-brand); margin-bottom: 10px; }
-.mm-cats > div { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-.mm-cat { display: flex; flex-direction: column; gap: 6px; font-size: 13px; color: var(--tint); }
-.mm-cat img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 12px; }
 
 /* Mobile menu: the overlay has a fixed height, so children must not shrink (that squashed the search field). */
 .mobile-menu > * { flex-shrink: 0; }
