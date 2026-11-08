@@ -180,7 +180,7 @@ ul { list-style: none; margin: 0; padding: 0; }
 .mm-search:focus-within { border-color: var(--tint); background: rgba(255, 255, 255, .16); }
 .mm-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: var(--tint); }
 .mm-search input::placeholder { color: rgba(247, 220, 210, .7); }
-.mm-nav { display: flex; flex-direction: column; gap: 4px; }
+.mm-nav { display: flex; flex-direction: column; gap: clamp(12px, 2.6vh, 24px); margin-top: clamp(4px, 1.5vh, 12px); }
 .mobile-menu .mm-nav a { display: block; font-family: var(--heading); font-size: clamp(34px, min(11vw, 7vh), 64px); line-height: 1.15; letter-spacing: -0.04em; }
 .mm-foot { margin-top: auto; display: flex; flex-direction: column; gap: 16px; padding-top: 24px; border-top: 1px solid rgba(247, 220, 210, .2); color: var(--on-brand); font-size: 14px; }
 .mm-account { display: inline-flex; align-items: center; gap: 10px; font-size: 16px; color: var(--tint); }
