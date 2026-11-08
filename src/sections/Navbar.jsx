@@ -236,7 +236,6 @@ export default function Navbar() {
               <Link to="/account" className="mm-account" onClick={() => setOpen(false)}>
                 <Icon name="user" size={20} /> My account
               </Link>
-              <p>Thoughtful details. Timeless designs.</p>
             </motion.div>
           </motion.div>
         )}
