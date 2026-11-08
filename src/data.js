@@ -95,7 +95,6 @@ export const FOOTER = [
   ] },
   { title: 'Company', links: [
     { label: 'About', to: '/about' },
-    { label: 'Our Story', to: '/about#story' },
     { label: 'Blog', to: '/blog' },
     { label: 'Careers', to: '/careers' },
   ] },
