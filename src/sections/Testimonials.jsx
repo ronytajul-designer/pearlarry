@@ -105,33 +105,36 @@ export default function Testimonials() {
         </motion.div>
       </div>
 
+      {/* One capsule: arrows + product thumbnails. Each thumb shows the piece the review is about. */}
       <div className="testi-controls">
-        <button className="testi-arrow" onClick={() => go(index - 1)} aria-label="Previous review">
-          <Icon name="arrowRight" size={20} style={{ transform: 'scaleX(-1)' }} />
-        </button>
+        <div className="testi-nav">
+          <button className="testi-arrow" onClick={() => go(index - 1)} aria-label="Previous review">
+            <Icon name="arrowRight" size={18} style={{ transform: 'scaleX(-1)' }} />
+          </button>
 
-        <div className="dots" role="tablist" aria-label="Choose review">
-          {TESTIMONIALS.map((t, i) => (
-            <button
-              key={t.name}
-              role="tab"
-              aria-selected={active === i}
-              aria-label={`Review ${i + 1} of ${N}, ${t.name}`}
-              className="dot"
-              onClick={() => go(N + i)}
-            >
-              <motion.span
-                initial={false}
-                animate={{ width: active === i ? 24 : 8, backgroundColor: active === i ? '#91220f' : '#dcd1cc' }}
-                transition={{ duration: 0.5, ease }}
-              />
-            </button>
-          ))}
+          <div className="thumbs" role="tablist" aria-label="Choose review">
+            {TESTIMONIALS.map((t, i) => {
+              const on = active === i
+              return (
+                <button
+                  key={t.name}
+                  role="tab"
+                  aria-selected={on}
+                  aria-label={`Review ${i + 1} of ${N}, ${t.name}`}
+                  className={`thumb ${on ? 'is-active' : ''}`}
+                  onClick={() => go(N + i)}
+                >
+                  {on && <motion.span layoutId="thumb-ring" className="thumb-ring" transition={{ duration: 0.6, ease }} />}
+                  <img src={t.img} alt="" loading="lazy" draggable="false" />
+                </button>
+              )
+            })}
+          </div>
+
+          <button className="testi-arrow" onClick={() => go(index + 1)} aria-label="Next review">
+            <Icon name="arrowRight" size={18} />
+          </button>
         </div>
-
-        <button className="testi-arrow" onClick={() => go(index + 1)} aria-label="Next review">
-          <Icon name="arrowRight" size={20} />
-        </button>
       </div>
     </section>
   )

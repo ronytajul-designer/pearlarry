@@ -336,16 +336,28 @@ ul { list-style: none; margin: 0; padding: 0; }
 .testi-attr { margin-top: auto; display: flex; gap: 6px; align-items: baseline; }
 .testi-attr strong { font-weight: 500; }
 .testi-attr span { font-size: 14px; color: var(--muted); }
-.testi-controls { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 40px; }
-.testi-arrow {
-  width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border); display: grid; place-items: center;
-  color: var(--text); flex: none; transition: background-color .4s var(--ease), color .4s var(--ease), border-color .4s, transform .3s var(--ease);
+.testi-controls { display: flex; justify-content: center; margin-top: 40px; }
+.testi-nav {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px;
+  background: #fff; border: 1px solid var(--border-subtle); border-radius: 999px;
+  box-shadow: 0 14px 36px -22px rgba(43, 23, 20, .45);
 }
-.testi-arrow:hover { background: var(--brand); border-color: var(--brand); color: #fff; }
-.testi-arrow:active { transform: scale(.92); }
-.dots { display: flex; align-items: center; }
-.dot { height: 44px; padding: 0 4px; display: grid; place-items: center; } /* 44px tap target, 8px visual */
-.dot span { display: block; height: 8px; border-radius: 99px; }
+.testi-arrow {
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  color: var(--text); transition: background-color .4s var(--ease), color .4s var(--ease), transform .3s var(--ease);
+}
+.testi-arrow:hover { background: var(--tint); color: var(--brand); }
+.testi-arrow:active { transform: scale(.9); }
+.thumbs { display: flex; align-items: center; gap: 2px; padding: 0 6px; border-inline: 1px solid var(--border-subtle); }
+.thumb { position: relative; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; }
+.thumb img {
+  width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+  filter: grayscale(.7); opacity: .55; transform: scale(.88);
+  transition: filter .5s var(--ease), opacity .5s var(--ease), transform .5s var(--ease);
+}
+.thumb:hover img { opacity: .9; filter: grayscale(.2); }
+.thumb.is-active img { filter: none; opacity: 1; transform: scale(1); }
+.thumb-ring { position: absolute; inset: 2px; border-radius: 50%; border: 1.5px solid var(--brand); }
 
 /* ============ FAQ ============ */
 .faq-inner { display: grid; grid-template-columns: 380px 1fr; gap: 72px; align-items: start; }
