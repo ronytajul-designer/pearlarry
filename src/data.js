@@ -1,30 +1,16 @@
-const img = (n) => `${import.meta.env.BASE_URL}img/${n}.webp`
+import { IMG } from './images'
 
-export const IMG = {
-  hero: img('hero'),
-  hoops: img('hoops'),
-  bracelet: img('bracelet'),
-  pendant: img('pendant'),
-  ring: img('ring'),
-  neckSingle: img('neck-single'),
-  neckLayered: img('neck-layered'),
-  handSingle: img('hand-single'),
-  handLayered: img('hand-layered'),
-}
+export { IMG }
 
 export const NAV = [
-  { label: 'Home', href: '#top' },
-  { label: 'Our Jewellery', href: '#best-sellers' },
-  { label: 'About Us', href: '#our-story' },
-  { label: 'Contact', href: '#faq' },
+  { label: 'Home', to: '/' },
+  { label: 'Our Jewellery', to: '/shop' },
+  { label: 'About Us', to: '/about' },
+  { label: 'Contact', to: '/contact' },
 ]
 
-export const PRODUCTS = [
-  { id: 'hoops', name: 'Signature Hoops', material: '14k Gold Vermeil', rating: '4.9', price: 24, img: IMG.hoops },
-  { id: 'bracelet', name: 'Fine Chain Bracelet', material: 'Adjustable', rating: '4.8', price: 22, img: IMG.bracelet },
-  { id: 'pendant', name: 'Radiance Pendant', material: '18k Gold Plated', rating: '5.0', price: 38, img: IMG.pendant },
-  { id: 'ring', name: 'Everyday Ring', material: 'Sterling Silver', rating: '4.9', price: 28, img: IMG.ring },
-]
+import { countIn } from './products'
+export { PRODUCTS, BEST_SELLERS, getProduct } from './products'
 
 export const FEATURES_LEFT = [
   { icon: 'leaf', title: 'Thoughtful materials', text: 'Discover 14k gold vermeil, 18k gold plating, and sterling silver across our collection.' },
@@ -50,11 +36,12 @@ export const LOOKS = [
   { id: 'statement', label: 'Statement Looks', pairs: [HAND, NECK] },
 ]
 
+// Counts come from the product catalogue so the homepage never disagrees with the shop.
 export const CATEGORIES = [
-  { name: 'Rings', count: 24, img: IMG.ring, area: 'a' },
-  { name: 'Necklaces', count: 15, img: IMG.pendant, area: 'b' },
-  { name: 'Earrings', count: 18, img: IMG.hoops, area: 'c' },
-  { name: 'Bracelets', count: 9, img: IMG.bracelet, area: 'd' },
+  { name: 'Rings', count: countIn('Rings'), img: IMG.ring, area: 'a' },
+  { name: 'Necklaces', count: countIn('Necklaces'), img: IMG.pendant, area: 'b' },
+  { name: 'Earrings', count: countIn('Earrings'), img: IMG.hoops, area: 'c' },
+  { name: 'Bracelets', count: countIn('Bracelets'), img: IMG.bracelet, area: 'd' },
 ]
 
 export const TESTIMONIALS = [
@@ -100,8 +87,28 @@ export const FAQS = [
 ]
 
 export const FOOTER = [
-  { title: 'Shop', links: ['Rings', 'Necklaces', 'Earrings', 'Bracelets'] },
-  { title: 'Company', links: ['About', 'Our Story', 'Blog', 'Careers'] },
-  { title: 'Support', links: ['FAQ', 'Shipping', 'Returns', 'Contact'] },
-  { title: 'Follow', links: ['Instagram', 'TikTok', 'YouTube', 'Pinterest'] },
+  { title: 'Shop', links: [
+    { label: 'Rings', to: '/shop?category=Rings' },
+    { label: 'Necklaces', to: '/shop?category=Necklaces' },
+    { label: 'Earrings', to: '/shop?category=Earrings' },
+    { label: 'Bracelets', to: '/shop?category=Bracelets' },
+  ] },
+  { title: 'Company', links: [
+    { label: 'About', to: '/about' },
+    { label: 'Our Story', to: '/about#story' },
+    { label: 'Blog', to: '/blog' },
+    { label: 'Careers', to: '/careers' },
+  ] },
+  { title: 'Support', links: [
+    { label: 'FAQ', to: '/#faq' },
+    { label: 'Shipping', to: '/contact' },
+    { label: 'Returns', to: '/contact' },
+    { label: 'Contact', to: '/contact' },
+  ] },
+  { title: 'Follow', links: [
+    { label: 'Instagram', href: 'https://instagram.com' },
+    { label: 'TikTok', href: 'https://tiktok.com' },
+    { label: 'YouTube', href: 'https://youtube.com' },
+    { label: 'Pinterest', href: 'https://pinterest.com' },
+  ] },
 ]

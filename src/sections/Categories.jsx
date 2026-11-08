@@ -1,4 +1,7 @@
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
+
+const MotionLink = motion.create(Link)
 import { CATEGORIES } from '../data'
 import { Reveal, SplitText, ease } from '../components/motion'
 import Icon from '../components/Icon'
@@ -22,8 +25,8 @@ export default function Categories() {
               viewport={{ once: true, amount: 0.3 }}
             >
               {/* In-view is observed on the unclipped wrapper: a fully clipped element never intersects. */}
-              <motion.a
-                href="#categories"
+              <MotionLink
+                to={`/shop?category=${c.name}`}
                 className="cat-inner"
                 aria-label={`Shop ${c.name}, ${c.count} pieces`}
                 variants={{
@@ -50,7 +53,7 @@ export default function Categories() {
                     <Icon name="arrowRight" size={18} />
                   </motion.span>
                 </span>
-              </motion.a>
+              </MotionLink>
             </motion.div>
           ))}
         </div>

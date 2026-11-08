@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { FAQS } from '../data'
@@ -15,7 +16,7 @@ export default function Faq() {
             Can’t find the answer you’re looking for? Our care team is always happy to help.
           </Reveal>
           <Reveal delay={0.25} y={14}>
-              <a href="mailto:hello@pearlarry.com" className="btn btn--brand"><RollText text="Contact Support" /></a>
+              <Link to="/contact" className="btn btn--brand"><RollText text="Contact Support" /></Link>
           </Reveal>
         </div>
 

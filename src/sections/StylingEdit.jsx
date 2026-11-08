@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
 import { LOOKS } from '../data'
@@ -125,7 +126,7 @@ export default function StylingEdit() {
         </AnimatePresence>
 
         <Reveal className="center" y={16}>
-            <a href="#categories" className="btn btn--brand"><RollText text="Shop the Looks" /></a>
+            <Link to="/shop" className="btn btn--brand"><RollText text="Shop the Looks" /></Link>
         </Reveal>
       </div>
     </section>

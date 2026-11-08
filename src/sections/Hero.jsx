@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { IMG } from '../data'
 import { SplitText, ease, RollText } from '../components/motion'
-import { gsap, prefersReducedMotion, useScrollTo } from '../lib/smooth'
+import { Link } from 'react-router-dom'
+import { gsap, prefersReducedMotion } from '../lib/smooth'
 
 export default function Hero({ ready }) {
   const root = useRef(null)
-  const scrollTo = useScrollTo()
 
   // Scroll-out choreography: image drifts down & zooms, copy lifts and fades, panel tucks in.
   useEffect(() => {
@@ -67,9 +67,9 @@ export default function Hero({ ready }) {
             animate={ready ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 1, ease, delay: 1.15 }}
           >
-              <a href="#best-sellers" className="btn btn--light btn--to-brand" onClick={(e) => { e.preventDefault(); scrollTo('#best-sellers') }}>
+              <Link to="/shop" className="btn btn--light btn--to-brand">
                 <RollText text="Shop Now" />
-              </a>
+              </Link>
           </motion.div>
         </div>
       </motion.div>

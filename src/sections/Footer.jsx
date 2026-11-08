@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { FOOTER } from '../data'
 import { gsap, prefersReducedMotion, useScrollTo } from '../lib/smooth'
@@ -48,7 +49,7 @@ export default function Footer() {
       <div className="container">
         <div className="foot-top">
           <div className="foot-brand">
-            <p className="foot-logo">Pearlarry</p>
+            <Link to="/" className="foot-logo">Pearlarry</Link>
             <p>A relationship between you and your style, between timeless design and modern wearability, between beauty and thoughtful craft.</p>
           </div>
           <nav className="foot-links" aria-label="Footer">
@@ -57,7 +58,11 @@ export default function Footer() {
                 <p className="foot-h">{c.title}</p>
                 <ul>
                   {c.links.map((l) => (
-                    <li key={l}><a href="#top" className="foot-link">{l}</a></li>
+                    <li key={l.label}>
+                      {l.to
+                        ? <Link to={l.to} className="foot-link">{l.label}</Link>
+                        : <a href={l.href} className="foot-link" target="_blank" rel="noreferrer">{l.label}</a>}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -74,7 +79,7 @@ export default function Footer() {
             <button className="btn btn--light btn--sm" onClick={() => scrollTo(0, { duration: 2.2 })}>
               <RollText text="Back to top ↑" />
             </button>
-          <p className="foot-legal"><a href="#top">Terms</a> · <a href="#top">Privacy</a></p>
+          <p className="foot-legal"><Link to="/terms">Terms</Link> · <Link to="/privacy">Privacy</Link></p>
         </div>
       </div>
     </footer>
