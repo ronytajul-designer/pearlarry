@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import Icon from './Icon'
@@ -65,17 +65,110 @@ export function PasswordField(props) {
   )
 }
 
-export function SelectField({ label, options, className = '', ...rest }) {
+/**
+ * Dropdown in the Pearlarry style (replaces native <select> everywhere).
+ * Keyboard: Enter/Space/Arrow opens, arrows move, Enter selects, Esc/Tab closes, type to jump.
+ */
+export function Dropdown({ value, onChange, options, prefix, id, className = '', align = 'left', labelledBy }) {
+  const [open, setOpen] = useState(false)
+  const [active, setActive] = useState(Math.max(0, options.indexOf(value)))
+  const root = useRef(null)
+  const list = useRef(null)
+  const auto = useId()
+  const listId = `${id || auto}-list`
+
+  useEffect(() => {
+    if (!open) return
+    const out = (e) => { if (!root.current?.contains(e.target)) setOpen(false) }
+    document.addEventListener('pointerdown', out)
+    return () => document.removeEventListener('pointerdown', out)
+  }, [open])
+  useEffect(() => { if (open) { setActive(Math.max(0, options.indexOf(value))); list.current?.focus() } }, [open]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const pick = (o) => { onChange(o); setOpen(false); root.current?.querySelector('button')?.focus() }
+  const onTriggerKey = (e) => {
+    if (['ArrowDown', 'ArrowUp', 'Enter', ' '].includes(e.key)) { e.preventDefault(); setOpen(true) }
+  }
+  const onListKey = (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); setActive((i) => Math.min(options.length - 1, i + 1)) }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((i) => Math.max(0, i - 1)) }
+    else if (e.key === 'Home') { e.preventDefault(); setActive(0) }
+    else if (e.key === 'End') { e.preventDefault(); setActive(options.length - 1) }
+    else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(options[active]) }
+    else if (e.key === 'Escape') { e.preventDefault(); setOpen(false); root.current?.querySelector('button')?.focus() }
+    else if (e.key === 'Tab') setOpen(false)
+    else if (e.key.length === 1) {
+      const i = options.findIndex((o) => o.toLowerCase().startsWith(e.key.toLowerCase()))
+      if (i >= 0) setActive(i)
+    }
+  }
+
+  return (
+    <div className={`dd ${open ? 'is-open' : ''} ${className}`} ref={root}>
+      <button
+        type="button"
+        id={id}
+        className="dd-trigger"
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        aria-controls={listId}
+        aria-labelledby={labelledBy ? `${labelledBy} ${id || ''}`.trim() : undefined}
+        onClick={() => setOpen((o) => !o)}
+        onKeyDown={onTriggerKey}
+      >
+        {prefix && <span className="dd-prefix">{prefix}</span>}
+        <span className="dd-value">{value}</span>
+        <motion.span className="dd-caret" animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.3, ease }}>
+          <Icon name="chevronDown" size={16} />
+        </motion.span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            ref={list}
+            id={listId}
+            role="listbox"
+            tabIndex={-1}
+            aria-activedescendant={`${listId}-${active}`}
+            className={`dd-menu dd-menu--${align}`}
+            onKeyDown={onListKey}
+            initial={{ opacity: 0, y: -6, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -4, scale: 0.98 }}
+            transition={{ duration: 0.22, ease }}
+            data-lenis-prevent
+          >
+            {options.map((o, i) => (
+              <li
+                key={o}
+                id={`${listId}-${i}`}
+                role="option"
+                aria-selected={o === value}
+                className={`dd-option ${i === active ? 'is-active' : ''} ${o === value ? 'is-selected' : ''}`}
+                onPointerEnter={() => setActive(i)}
+                onClick={() => pick(o)}
+              >
+                <span>{o}</span>
+                {o === value && <Icon name="check" size={16} stroke={2.2} />}
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  )
+}
+
+/** Labelled dropdown field. Works controlled (value + onChange(e)) or uncontrolled (defaultValue). */
+export function SelectField({ label, options, className = '', value, defaultValue, onChange }) {
   const id = useId()
+  const [inner, setInner] = useState(defaultValue ?? options[0])
+  const v = value ?? inner
+  const change = (o) => { setInner(o); onChange?.({ target: { value: o } }) }
   return (
     <div className={`field ${className}`}>
-      {label && <label htmlFor={id} className="field-label">{label}</label>}
-      <div className="field-box select-box">
-        <select id={id} className="input" {...rest}>
-          {options.map((o) => <option key={o} value={o}>{o}</option>)}
-        </select>
-        <Icon name="chevronDown" size={18} className="select-caret" />
-      </div>
+      {label && <span id={`${id}-l`} className="field-label">{label}</span>}
+      <Dropdown id={id} labelledBy={`${id}-l`} value={v} onChange={change} options={options} className="dd--field" />
     </div>
   )
 }

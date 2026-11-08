@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useSearchParams } from 'react-router-dom'
 import { PRODUCTS } from '../products'
-import { PageHeader, Checkbox } from '../components/ui'
+import { PageHeader, Checkbox, Dropdown } from '../components/ui'
 import ProductCard from '../components/ProductCard'
 import Cta from '../sections/Cta'
 import Icon from '../components/Icon'
@@ -157,13 +157,14 @@ export default function Shop() {
               <p className="shop-count" aria-live="polite">
                 Showing {shown.length} of {results.length} {results.length === 1 ? 'product' : 'products'}
               </p>
-              <label className="sort">
-                <span>Sort by:</span>
-                <select value={sort} onChange={(e) => update((n) => (e.target.value === 'Featured' ? n.delete('sort') : n.set('sort', e.target.value)))}>
-                  {Object.keys(SORTS).map((s) => <option key={s}>{s}</option>)}
-                </select>
-                <Icon name="chevronDown" size={16} />
-              </label>
+              <Dropdown
+                className="sort"
+                align="right"
+                prefix="Sort by:"
+                value={sort}
+                options={Object.keys(SORTS)}
+                onChange={(v) => update((n) => (v === 'Featured' ? n.delete('sort') : n.set('sort', v)))}
+              />
             </div>
 
             <AnimatePresence initial={false}>
