@@ -104,7 +104,7 @@ function SiteLayout() {
     <>
       <a className="skip" href="#main">Skip to content</a>
       <Navbar />
-      <AnimatePresence mode="wait" initial={false} onExitComplete={announceSwap}>
+      <AnimatePresence mode="wait" onExitComplete={announceSwap}>
         <PageFade key={location.pathname}>
           <main id="main">{outlet}</main>
           <Footer />
@@ -118,7 +118,7 @@ function BareLayout() {
   const location = useLocation()
   const outlet = useOutlet()
   return (
-    <AnimatePresence mode="wait" initial={false} onExitComplete={announceSwap}>
+    <AnimatePresence mode="wait" onExitComplete={announceSwap}>
       <PageFade key={location.pathname}>
         <main id="main">{outlet}</main>
       </PageFade>

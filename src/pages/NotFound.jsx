@@ -13,7 +13,7 @@ export default function NotFound() {
         <div className="nf-num" aria-hidden="true">
           {['4', '0', '4'].map((c, i) => (
             <span className="split-mask" key={i}>
-              <motion.span className="nf-digit" initial={{ y: '110%' }} animate={ready ? { y: 0 } : undefined} transition={{ duration: 1.1, ease, delay: 0.1 + i * 0.1 }}>
+              <motion.span className="nf-digit" initial={{ y: '140%' }} animate={ready ? { y: 0 } : undefined} transition={{ duration: 1.1, ease, delay: 0.1 + i * 0.1 }}>
                 {c}
                 {i === 1 && (
                   <motion.i className="nf-gem" initial={{ scale: 0, rotate: 0 }} animate={ready ? { scale: 1, rotate: 45 } : undefined} transition={{ type: 'spring', stiffness: 220, damping: 12, delay: 0.7 }} />

@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { PRODUCTS, getProduct, money, productCopy, BEST_SELLERS } from '../products'
 import { Breadcrumb, Field, Modal, Qty, Radio, Stars } from '../components/ui'
-import ProductCard from '../components/ProductCard'
+import ProductCard, { ProductRow } from '../components/ProductCard'
 import Icon from '../components/Icon'
 import { Reveal, RollText, SplitText, ease } from '../components/motion'
 import { useAuth, useCart, useReady, useToast, EXPRESS_FEE } from '../lib/store'
@@ -361,9 +361,9 @@ export default function Product() {
             <SplitText as="h2" className="h4" text="You might also like" />
             <Link to="/shop" className="link-underline">View All Jewellery</Link>
           </div>
-          <div className="products">
-            {related.map((r, i) => <ProductCard key={r.id} p={r} i={i} />)}
-          </div>
+          <ProductRow>
+            {related.map((r, i) => <ProductCard key={r.id} p={r} i={i} group />)}
+          </ProductRow>
         </div>
       </section>
     </>

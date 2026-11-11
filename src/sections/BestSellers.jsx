@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { BEST_SELLERS } from '../data'
 import { Reveal, SplitText } from '../components/motion'
-import ProductCard from '../components/ProductCard'
+import ProductCard, { ProductRow } from '../components/ProductCard'
 
 export default function BestSellers() {
   return (
@@ -19,9 +19,9 @@ export default function BestSellers() {
             <Link to="/shop" className="link-underline">View All Jewellery</Link>
           </Reveal>
         </div>
-        <div className="products">
-          {BEST_SELLERS.map((p, i) => <ProductCard key={p.id} p={p} i={i} />)}
-        </div>
+        <ProductRow>
+          {BEST_SELLERS.map((p, i) => <ProductCard key={p.id} p={p} i={i} group />)}
+        </ProductRow>
       </div>
     </section>
   )

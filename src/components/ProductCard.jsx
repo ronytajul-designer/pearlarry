@@ -1,15 +1,39 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { createContext, useContext, useRef, useState } from 'react'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { RollText, ease } from './motion'
 import Icon from './Icon'
 import { useCart, useToast } from '../lib/store'
 import { money } from '../products'
 
+const cardVariants = {
+  hidden: { opacity: 0, y: 60 },
+  show: (delay = 0) => ({ opacity: 1, y: 0, transition: { duration: 1, ease, delay } }),
+}
+
+/**
+ * Horizontal rows (home best sellers, related, cart) use <ProductRow>: the row enters view as one,
+ * so cards that start off-screen inside a swipe carousel are already visible when swiped to.
+ */
+const RowInView = createContext(null)
+
+// The card is its own variant controller (it uses whileHover="hover"), so it can't inherit variant
+// labels from a parent. The row shares its in-view state through context instead.
+export function ProductRow({ children, className = 'products' }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, amount: 0.2 })
+  return (
+    <div ref={ref} className={className}>
+      <RowInView.Provider value={inView}>{children}</RowInView.Provider>
+    </div>
+  )
+}
+
 /** One product card for every grid on the site (home, shop, PDP, cart, wishlist). */
-export default function ProductCard({ p, i = 0, variant = '' }) {
+export default function ProductCard({ p, i = 0, variant = '', group = false }) {
   const cart = useCart()
   const toast = useToast()
+  const rowInView = useContext(RowInView)
   const [added, setAdded] = useState(false)
   const add = () => {
     if (added) return
@@ -21,10 +45,10 @@ export default function ProductCard({ p, i = 0, variant = '' }) {
   return (
     <motion.article
       className={`product ${variant}`}
-      initial={{ opacity: 0, y: 60 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 1, ease, delay: (i % 4) * 0.08 }}
+      variants={cardVariants}
+      custom={(group ? i : i % 4) * 0.08}
+      initial="hidden"
+      {...(group ? { animate: rowInView ? 'show' : 'hidden' } : { whileInView: 'show', viewport: { once: true, amount: 0.2 } })}
       whileHover="hover"
     >
       <Link to={`/product/${p.id}`} className="product-link" aria-label={`${p.name}, ${money(p.price)}`}>

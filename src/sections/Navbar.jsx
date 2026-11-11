@@ -199,9 +199,9 @@ export default function Navbar() {
                     to={l.to}
                     onClick={() => setOpen(false)}
                     className={pathname === l.to ? 'is-active' : ''}
-                    initial={{ y: '110%' }}
+                    initial={{ y: '140%' }}
                     animate={{ y: 0 }}
-                    exit={{ y: '110%' }}
+                    exit={{ y: '140%' }}
                     transition={{ duration: 0.7, ease, delay: 0.25 + i * 0.06 }}
                   >
                     {l.label}

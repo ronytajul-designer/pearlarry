@@ -29,7 +29,7 @@ export function SplitText({ text, as = 'span', className, delay = 0, stagger = 0
                   <motion.span
                     className="split-word"
                     variants={{
-                      hidden: { y: '110%', rotate: 4 },
+                      hidden: { y: '140%', rotate: 4 },
                       show: { y: '0%', rotate: 0, transition: { duration: 1, ease, delay: delay + idx * stagger } },
                     }}
                   >

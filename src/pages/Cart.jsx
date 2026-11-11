@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { BEST_SELLERS, money, money2 } from '../products'
 import { EmptyState, Qty } from '../components/ui'
-import ProductCard from '../components/ProductCard'
+import ProductCard, { ProductRow } from '../components/ProductCard'
 import Icon from '../components/Icon'
 import { RollText, SplitText, ease } from '../components/motion'
 import { useCart, useReady, FREE_SHIPPING_FROM } from '../lib/store'
@@ -127,9 +127,9 @@ export default function Cart() {
       <section className="section related tint related--cart">
         <div className="container">
           <SplitText as="h2" className="h3" text="You might also like" />
-          <div className="products">
-            {recs.map((p, i) => <ProductCard key={p.id} p={p} i={i} variant="product--white" />)}
-          </div>
+          <ProductRow>
+            {recs.map((p, i) => <ProductCard key={p.id} p={p} i={i} variant="product--white" group />)}
+          </ProductRow>
         </div>
       </section>
     </>

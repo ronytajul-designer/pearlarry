@@ -9,9 +9,9 @@ export default function Preloader({ onDone }) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ onComplete: () => done.current() })
-      tl.from('.pl-char', { yPercent: 120, rotate: 6, duration: 0.9, ease: 'expo.out', stagger: 0.04 })
+      tl.from('.pl-char', { yPercent: 150, rotate: 6, duration: 0.9, ease: 'expo.out', stagger: 0.04 })
         .fromTo('.pl-bar span', { scaleX: 0 }, { scaleX: 1, duration: 0.9, ease: 'power2.inOut' }, 0.1)
-        .to('.pl-char', { yPercent: -120, duration: 0.6, ease: 'expo.in', stagger: 0.02 }, '+=0.1')
+        .to('.pl-char', { yPercent: -150, duration: 0.6, ease: 'expo.in', stagger: 0.02 }, '+=0.1')
         .to('.pl-bar', { opacity: 0, duration: 0.3 }, '<')
         .to(root.current, { clipPath: 'inset(0 0 100% 0)', duration: 0.9, ease: 'expo.inOut' }, '-=0.25')
     }, root)
